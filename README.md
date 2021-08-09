@@ -12,6 +12,8 @@ npm test
 
 angular.json can also be updated with the following to create reports every time you test. See [Find out how much code you're testing](https://angular.io/guide/testing-code-coverage) for more information.
 
+However, see https://medium.com/ngconf/angular-unit-testing-code-coverage-lies-603c6c85f801
+
 ```json
 "test": {
   "options": {
