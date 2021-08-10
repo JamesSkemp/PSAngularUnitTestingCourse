@@ -27,7 +27,8 @@ describe('HeroService', () => {
 
     describe('getHero', () => {
         xit('should call get with the correct URL (method 1)', () => {
-
+            // similar to method 1, but uncomment and use items above
+            // TODO requires a newer version of Angular for the inject usages on TestBed.
         });
         it('should call get with the correct URL (method 2)', inject([HeroService, HttpTestingController], (heroService: HeroService, controller: HttpTestingController) => {
             heroService.getHero(4).subscribe(hero => {
