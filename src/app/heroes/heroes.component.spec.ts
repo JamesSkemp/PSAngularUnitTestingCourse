@@ -5,6 +5,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
+import { HeroComponent } from "../hero/hero.component";
 import { HeroesComponent } from "./heroes.component";
 
 describe('HeroesComponent', () => {
@@ -133,5 +134,43 @@ describe('HeroesComponent (shallow w/ no schema)', () => {
         fixture.detectChanges();
 
         expect(fixture.debugElement.queryAll(By.css('li')).length).toBe(3);
+    });
+});
+
+describe('HeroesComponent (deep)', () => {
+    let fixture: ComponentFixture<HeroesComponent>;
+    let mockHeroService;
+    let HEROES;
+
+    beforeEach(() => {
+        HEROES = [
+            {id: 1, name: 'SpiderDude', strength: 8},
+            {id: 2, name: 'Woderful Woman', strength: 24},
+            {id: 3, name: 'SuperDude', strength: 55}
+        ];
+        mockHeroService = jasmine.createSpyObj(['getHeroes', 'addHero', 'deleteHero']);
+
+        TestBed.configureTestingModule({
+            declarations: [HeroesComponent, HeroComponent],
+            imports: [RouterTestingModule],
+            providers: [{ provide: HeroService, useValue: mockHeroService }],
+            //schemas: [NO_ERRORS_SCHEMA]
+        });
+        fixture = TestBed.createComponent(HeroesComponent);
+    });
+
+    it('should render each hero as a HeroComponent', () => {
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        // Run ngOnInit.
+        fixture.detectChanges();
+
+        // component = subclass of directive
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        expect(heroComponents.length).toEqual(3);
+        expect(heroComponents[0].componentInstance.hero.name).toEqual('SpiderDude');
+        for (let i = 0; i < HEROES.length; i++) {
+            expect(heroComponents[i].componentInstance.hero).toEqual(HEROES[i]);
+        }
     });
 });
