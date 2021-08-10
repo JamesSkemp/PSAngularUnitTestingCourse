@@ -189,4 +189,32 @@ describe('HeroesComponent (deep)', () => {
 
         expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
     });
+
+    it('should call heroservice.deletehero when the Hero component\'s delete is triggered', () => {
+        // Find the delete method on the component instance and watch it.
+        spyOn(fixture.componentInstance, 'delete');
+
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        fixture.detectChanges();
+
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        heroComponents[0].triggerEventHandler('delete', null);
+
+        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+    });
+
+    it('should call heroservice.deletehero when the Hero component\'s delete is emitted/raised', () => {
+        // Find the delete method on the component instance and watch it.
+        spyOn(fixture.componentInstance, 'delete');
+
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        fixture.detectChanges();
+
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        (<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
+
+        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+    });
 });
